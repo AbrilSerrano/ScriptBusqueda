@@ -1,18 +1,14 @@
 import streamlit as st
 import pandas as pd
 
-# 1. CONFIGURACIÓN VISUAL DE LA PÁGINA
+#DiSEÑO DE LA PAGINA    
 st.set_page_config(page_title="Buscador", layout="centered")
-
-# Títulos principales
+# Títulos
 st.title("🔍 Buscador")
 st.write("Cargue el archivo CSV y seleccione el método de búsqueda.")
-
-# Componente para subir el archivo
 archivo_csv = st.file_uploader("Arrastrá acá tu archivo .csv", type="csv")
 
-# 2. FUNCIÓN DE CARGA
-# 2. FUNCIÓN DE CARGA
+# FUNCIÓN DE CARGA
 @st.cache_data
 def procesar_datos(file):
     df = pd.read_csv(file, sep=';', dtype=str, encoding='latin-1')
@@ -22,7 +18,7 @@ def procesar_datos(file):
         
     return df
 
-# 3. LÓGICA DE INTERACCIÓN
+# INTERACCIÓN
 if archivo_csv:
     df = procesar_datos(archivo_csv)
     st.success(f"Archivo processed con éxito. Total: {len(df):,} registros.")
@@ -37,7 +33,7 @@ if archivo_csv:
         if cuit_buscado:
             termino_cuit = cuit_buscado.strip()
         
-            # VALIDACIÓN DE CUIT: ¿Son solo números?
+            # VALIDACIÓN DE CUIT
             if not termino_cuit.isdigit():
                 st.warning("⚠️ El CUIT solo debe contener números (sin letras, guiones ni puntos).")
                 resultado = pd.DataFrame()  # Creamos un resultado vacío para evitar errores
@@ -55,26 +51,26 @@ if archivo_csv:
         if nombre_buscado:
             termino = nombre_buscado.upper().strip()
             
-            # VALIDACIÓN DE RAZÓN SOCIAL: ¿Tiene números?
+            # VALIDACIÓN DE RAZÓN SOCIAL
             texto_sin_espacios = termino.replace(" ", "")
             
             if texto_sin_espacios and not texto_sin_espacios.isalpha():
                 st.warning("⚠️ La Razón Social no debería contener números.")
-                resultado = pd.DataFrame()  # Resultado vacío
+                resultado = pd.DataFrame()  
             else:
-                # Si pasa la validación, busca normalmente
+            
                 if len(termino) == 1:
                     filtro = df['RAZON SOCIAL'].str.upper().str.startswith(termino, na=False)
                 else:
                     filtro = df['RAZON SOCIAL'].str.upper().str.contains(termino, na=False)
                 resultado = df[filtro]
 
-    # 4. MOSTRAR RESULTADOS
+    # MOSTRAR RESULTADOS
     if (modo == "CUIT" and cuit_buscado) or (modo == "Razón Social" and nombre_buscado):
         if not resultado.empty:
             st.write(f"Se encontraron {len(resultado)} coincidencia(s):")
             
-            # Mostrar tabla de resultados
+        
             st.dataframe(resultado)
         else:
             st.error("No se encontraron resultados para tu búsqueda.")
