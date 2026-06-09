@@ -1,5 +1,7 @@
 INSTALACION DE SCRIPT EN UBUNTU
-        PRIMERA FORMA
+        
+PRIMERA FORMA
+
 **1 PREPARACION DEL ENTORNO**
     
     # Instalacion de Python:
