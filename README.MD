@@ -1,15 +1,16 @@
 INSTALACION DE SCRIPT EN UBUNTU
         
-PRIMERA FORMA
+-PRIMERA FORMA-
+-----------------------------------------------------------------------
 
-**1 PREPARACION DEL ENTORNO**
+**1) PREPARACION DEL ENTORNO**
     
     # Instalacion de Python:
 
         apt update
         apt install python3-pip python3-pandas -y
 
-    # Preparacion del Entorno
+    # Instalacion de pipx
 
         apt install pipx -y
         pipx ensurepath
@@ -22,7 +23,7 @@ PRIMERA FORMA
 
         pipx inject streamlit pandas
 
-**INSTALACION DE ARCHIVOS EN EL SISTEMA**
+**2) INSTALACION DE ARCHIVOS EN EL SISTEMA**
 
     #Descargar la carpeta de github descomprimir el .zip y mover los archivos
 
@@ -35,7 +36,7 @@ PRIMERA FORMA
 
 *Nota: corroborar el nombre de la carpeta, segun de donde haya sido descargada puede variar
 
-**CREACION DEL DEMONIO**
+**3) CREACION DEL DEMONIO**
 
     #Crear el archivo del servicio
         nano /etc/systemd/system/buscador.service
@@ -43,7 +44,7 @@ PRIMERA FORMA
         --Copiar y Pegar lo siguiente --
 
 [Unit]
-Description=Servicio de Buscador Streamlit con PIPX
+Description=Servicio de Buscador 
 After=network.target
 
 [Service]
@@ -68,7 +69,7 @@ WantedBy=multi-user.target
 
             systemctl status buscador.service
 
-**CONFIGURACION DE ACCESO**
+**4)CONFIGURACION DE ACCESO**
 
 entrar en el navegador a la direccion "localhost:2405" 
 fijar el marcador
@@ -76,15 +77,16 @@ dejar que el usuario experimente C:
 
 
             SEGUNDA FORMA (inicio manual)
-omitimos la configuracion final del demonio.
 
-le damos permisos de ejecucion al iniciarBuscador.sh
-    
-    chmod +x iniciarBuscador.sh
+        #realizamos el paso 1, 2 de igual manera.
+        #el paso 3 no habilitamos el demonio para inicio automatico, es decir, omitimos:  
+                systemctl enable buscador.service
 
-creamos el lanzador en /usr/share/applications/
+        #4) CREAR EL LANZADOR
 
-nano buscador.desktop 
+                #creamos el lanzador en /usr/share/applications/
+
+                nano buscador.desktop 
 
 [Desktop Entry]
 Version=1.0
@@ -96,19 +98,23 @@ Icon=system-search
 Terminal=false
 Categories=Utility; 
 
-le damos permisos de ejecucion:
+                #Le damos permisos
 
-chmod 755 buscador.desktop
+                        chmod 755 buscador.desktop
 
-lo copiamos al escritorio:
+                #Lo copiamos al escritorio:
 
-cp buscador.desktop /home/host/Escritorio
+                        cp buscador.desktop /home/host/Escritorio
 
-# Damos permisos de visudo al usuario para ejecutar el .sh
+                # Damos permisos de visudo al usuario para ejecutar el .sh
 
-visudo /etc/sudoers.d/buscador
+                        visudo /etc/sudoers.d/buscador
 
-agregar la linea, remplazando usuario_comun por el host
+                #Agregar la linea, remplazando usuario_comun por el host
 
-usuario_comun ALL=(ALL) NOPASSWD: /usr/bin/systemctl start buscador.service
+                        usuario_comun ALL=(ALL) NOPASSWD: /usr/bin/systemctl start buscador.service
+                #Copiar el .desktop al Escritorio. Darle a permitir lanzar 
+
+listo :)
+
 
